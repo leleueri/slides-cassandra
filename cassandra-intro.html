@@ -35,13 +35,18 @@ Keep in mind that...
                     <section data-markdown>
                         <textarea data-template>
 ## In a nutshell
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+## In a nutshell
 
 - NoSQL database column oriented
 - Apache project since 2008
 - Brewer's CAP Theorem : focus on AP
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ## In a nutshell
 
@@ -53,7 +58,7 @@ Keep in mind that...
 - Commodity hardware
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ## In a nutshell
 
@@ -62,7 +67,7 @@ Keep in mind that...
 - BASE : Basic Availability Soft-state Eventual consistency
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ## In a nutshell
 
@@ -78,69 +83,74 @@ Some use cases:
                     <section data-markdown>
                         <textarea data-template>
 ## How it works
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+## How it works
 
 - Node : Cassandra process
 - Cluster : Set of cassandra nodes
 - TokenRange shared by nodes : [-2^63 +2^63]
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Example
 
 ![How it works](img/Cassandra_hiw_1.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Tokens
 
 ![How it works](img/Cassandra_hiw_2.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Token computation
 
 ![How it works](img/Cassandra_hiw_3.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Coordinator
 
 ![How it works](img/Cassandra_hiw_4.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Coordinator
 
 ![How it works](img/Cassandra_hiw_5.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Replication Factor
 
 ![How it works](img/Cassandra_hiw_6.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown  data-transition="none">
                         <textarea data-template>
 ### Consistency Level
 
 ![How it works](img/Cassandra_hiw_7.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Hints
 
 ![How it works](img/Cassandra_hiw_8.png)
                         </textarea>
                     </section>
-                    <section data-markdown>
+                    <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Anti-Entropy
 
@@ -153,10 +163,184 @@ Some use cases:
                     <section data-markdown>
                         <textarea data-template>
 ## Data Model
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+## Data Model
 
+* Column Oriented
+* Legacy model // THRIFT ??
+* CQL since Cassandra 1.x
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Legacy Data Model
+
+* Keyspace
+* Column Family 
+* Row
+* Row key
+* Column Key
+* Column Value
+    * Metadata
+    * Timestamp
+    * Value (primtive / collection / UDT)
+* Thrift protocol
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Skinny Row
+
+![Skinny Row](img/Cassandra_skinny.png)
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Wide Row
+
+![Wide Row](img/Cassandra_wide.png)
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### CQL
+
+* Cassandra Query Language (SQL Like)
+* Keyspace
+* Schema
+* Table 
+* Primary Key
+* Partition Key
+* Partition (row)
+* Row
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### CQL / Skinny row
+
+// Create table Simple PK
+// INSERT & Select
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### CQL / Wide row
+
+// Create table Composed PK
+// INSERT & Select (minimum with Partition key)
+// Two dimensions
+// limite sur wide row
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### CQL / Extras
+
+* Secondary Index
+* UDT
+* UDF/UDA
+* TTL
+* ...
 
                         </textarea>
                     </section>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <textarea data-template>
+## Write Path
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Write Path
+
+* Append Only
+* 4 elements
+    * CommitLog
+    * Memtable
+    * SSTable
+    * Compaction
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Write Path
+
+// TODO illustration
+                        </textarea>
+                    </section>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <textarea data-template>
+## Read Path
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Read Path
+
+* 7 elements
+    * Memtable
+    * Row Cache 
+    * Bloom Filter
+    * Key Cache
+    * Partition Summary
+    * Partition Index
+    * SSTable
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Read Path
+
+// TODO illustration
+                        </textarea>
+                    </section>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <textarea data-template>
+## Caveats
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### NoSQL
+
+* Cassandra is a NoSQL database
+* Write Heavy
+* Query First
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Anti-Pattern
+
+* Avoid read before write (upsert)
+* Avoid Large Wide rows
+* DO NOT Use Cassandra as distributed queue
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Bench
+
+* Benchmarks are mandatory
+* Long runs for compaction
+* Launch repairs
+                        </textarea>
+                    </section>
+                </section>
+                <section data-markdown>
+                    <textarea data-template>
+## Q & A
+                    </textarea>
                 </section>
 			</div>
 		</div>
