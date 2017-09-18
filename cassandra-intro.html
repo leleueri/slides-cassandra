@@ -1,7 +1,9 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/moon.1.css">
+		<link rel="stylesheet" href="css/theme/moon.1.css">		
+        <!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
 	</head>
 	<body>
         <style type="text/css">
@@ -110,14 +112,14 @@ Some use cases:
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-### Token computation
+### Client
 
 ![How it works](img/Cassandra_hiw_3.png)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-### Coordinator
+### Coordinator & Token computation
 
 ![How it works](img/Cassandra_hiw_4.png)
                         </textarea>
@@ -170,7 +172,7 @@ Some use cases:
 ## Data Model
 
 * Column Oriented
-* Legacy model // THRIFT ??
+* Legacy model
 * CQL since Cassandra 1.x
                         </textarea>
                     </section>
@@ -218,23 +220,94 @@ Some use cases:
 * Row
                         </textarea>
                     </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### CQL / Skinny row
-
-// Create table Simple PK
-// INSERT & Select
-                        </textarea>
+                    <section data-transition="none">
+					<h3>CQL / Skinny row</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+create table skinny (
+    userid varchar primary key, 
+    firstname varchar, 
+    lastname varchar, 
+    birth_year int);
+					</code></pre>
+                    <p> Primary Key == Partition Key (== Row Key) </p>
                     </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### CQL / Wide row
+                    <section data-transition="none">
+					<h3>CQL / Skinny row</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+insert into skinny (userid, firstname, lastname, birth_year) 
+values ('user0001', 'f_user0001', 'l_user0001', 1983);
+					</code></pre>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Skinny row</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+$>select * from skinny; 
 
-// Create table Composed PK
-// INSERT & Select (minimum with Partition key)
-// Two dimensions
-// limite sur wide row
-                        </textarea>
+ userid   | birth_year | firstname     | lastname
+----------+------------+---------------+-------------
+ user0001 |       1983 | f_user0001    | l_user0001
+ user0002 |       null | f_user0002    | l_user0002
+
+(2 rows)
+					</code></pre>
+                    <p>Where clause on primary key</p>
+					<pre><code class="hljs" data-trim contenteditable>
+$>select * from skinny where userid = 'user0001'; 
+
+ userid   | birth_year | firstname     | lastname
+----------+------------+---------------+-------------
+ user0001 |       1983 | f_user0001    | l_user0001
+
+(2 rows)
+					</code></pre>
+                    </section>  
+                    <section data-transition="none">
+					<h3>CQL / Wide row</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+create table wide (objectid varchar, resolution varchar, 
+    format varchar, size int, 
+    primary key (objectid, resolution));
+					</code></pre>
+                    <li>Primary Key == (Partition Key + Clustering Key) </li>
+                    <li>Partition Key == Row Key </li>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Wide row</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+$> select * from wide;
+
+ objectid  | resolution | format | size
+-----------+------------+--------+--------
+ object002 |    800x600 |    PNG | 10240
+ object001 |    128x128 |   JPEG |  1024
+ object001 |    800x600 |   JPEG | 10240
+ 
+(3 rows)
+					</code></pre>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Wide row</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+$> select * from wide where objectid = 'object001';
+
+ objectid  | resolution | format | size
+-----------+------------+--------+--------
+ object001 |    128x128 |   JPEG |  1024
+ object001 |    800x600 |   JPEG | 10240
+ 
+(2 rows)
+					</code></pre>
+                    
+                    <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide where objectid = 'object001' 
+    and resolution > '128x128';
+
+ objectid  | resolution | format | size
+-----------+------------+--------+--------
+ object001 |    800x600 |   JPEG | 10240
+ 
+(1 rows)
+					</code></pre>
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
