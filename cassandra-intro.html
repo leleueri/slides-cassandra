@@ -41,7 +41,7 @@ Keep in mind that...
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-## In a nutshell
+### In a nutshell
 
 - NoSQL database column oriented
 - Apache project since 2008
@@ -50,19 +50,19 @@ Keep in mind that...
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-## In a nutshell
+### Promises
 
 - High Availability
 - Scalable
 - No SPOF
 - Multi-DC
-- Simple to exploit (?)
+- Simple
 - Commodity hardware
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-## In a nutshell
+### Warning
 
 - Mainly for write heavy workload
 - Not ACID : Atomic Consistent Isolated Durable
@@ -71,9 +71,7 @@ Keep in mind that...
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-## In a nutshell
-
-Some use cases:
+### Use cases
 
 - Metrics storage for IoT [Kaa project](https://www.kaaproject.org/)
 - Messaging services (chat, comments, notifications)
@@ -188,7 +186,7 @@ Some use cases:
 * Column Value
     * Metadata
     * Timestamp
-    * Value (primtive / collection / UDT)
+    * Value 
 * Thrift protocol
                         </textarea>
                     </section>
@@ -485,7 +483,8 @@ $> select * from wide where objectid = 'object001'
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/notes/notes.js', async: false }
 				]
 			});
 		</script>
