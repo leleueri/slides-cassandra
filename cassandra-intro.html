@@ -30,7 +30,7 @@ Data Model
 
 Read &amp; Write path
 
-Keep in mind that...
+Caveats
                     </textarea>
                 </section>
                 <section>
@@ -309,11 +309,13 @@ $> select * from wide where objectid = 'object001'
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-### CQL / Extras
+### Extras
 
+* No mandatory columns
 * Secondary Index
 * UDT
 * UDF/UDA
+* Delete / tombstones
 * TTL
 * ...
 
@@ -443,7 +445,7 @@ $> select * from wide where objectid = 'object001'
 * Cassandra is a NoSQL database
 * Write Heavy
 * Query First
-* Denormalize
+* Denormalize !
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -452,7 +454,7 @@ $> select * from wide where objectid = 'object001'
 
 * Avoid read before write (upsert)
 * Avoid Large Wide rows
-* DO NOT Use Cassandra as distributed queue
+* DO NOT Use Cassandra as distributed queue (tombstones)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
