@@ -43,9 +43,9 @@ Caveats
                         <textarea data-template>
 ### In a nutshell
 
-- NoSQL database column oriented
+- NoSQL database column oriented 
 - Apache project since 2008
-- Brewer's CAP Theorem : focus on AP
+- Inspired by Amazon Dynamo & Google BigTable
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -54,19 +54,28 @@ Caveats
 
 - High Availability
 - No SPOF
-- Scalable
+- Scalable (scale-out)
 - Multi-DC
-- Simple
+- Simple (really?)
 - Commodity hardware
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-### Warning
+### Why should I use Cassandra
 
-- Mainly for write heavy workload
-- Not ACID : Atomic Consistent Isolated Durable
-- BASE : Basic Availability Soft-state Eventual consistency
+- Big Data
+- High Availability
+- Replication
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Why shouldn't use Cassandra
+
+- Small data 
+- ACID
+- Relational model (Join)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -76,6 +85,15 @@ Caveats
 - Metrics storage for IoT [Kaa project](https://www.kaaproject.org/)
 - Messaging services (chat, comments, notifications)
 - Playlist for Video/Music Streaming services (Netflix/Spotify)
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Warning
+
+- Mainly for write heavy workload
+- Not ACID : Atomic Consistent Isolated Durable
+- BASE : Basic Availability Soft-state Eventual consistency
                         </textarea>
                     </section>
                 </section>
@@ -162,7 +180,7 @@ Caveats
                 <section>
                     <section data-markdown>
                         <textarea data-template>
-## Data Model
+## Data Model & Query Language
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -464,26 +482,6 @@ $> select * from wide where objectid = 'object001'
 * Benchmarks are mandatory
 * Long runs for compaction
 * Launch repairs
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Safety
-
-* AuthN/AuthZ
-* SSL/TLS
-* Backup
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Monitoring / Run
-
-* Metrics
-* Nodetool
-* Repair !!
-* JBOD / RAID0
-* ...
                         </textarea>
                     </section>
                 </section>
