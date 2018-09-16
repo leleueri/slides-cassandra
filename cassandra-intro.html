@@ -54,10 +54,9 @@ Conclusion
 
 - High Availability
 - No SPOF
-- Scalable (scale-out)
+- Scale-out
 - Multi-DC
 - Simple (really?)
-- Commodity hardware
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -109,7 +108,7 @@ Conclusion
 
 * Column Oriented
 * Keyspace
-* Column Family / Table
+* Column Family
 * Partition
                         </textarea>
                     </section>
@@ -132,13 +131,12 @@ Conclusion
 ### CQL
 
 * Cassandra Query Language (SQL Like)
-* Keyspace
 * Schema
+* Keyspace
 * Table 
+* Row
 * Primary Key
 * Partition Key
-* Partition
-* Row
                         </textarea>
                     </section>
                     <section data-transition="none">
@@ -164,7 +162,8 @@ insert into skinny (userid, firstname, lastname, email)
 values ('user0001', 'John', 'Doe', "jdoe@yahoo.fr");
                     </code></pre>
 					<pre><code class="hljs" data-trim contenteditable>
-update skinny set email = 'jdoe@gmail.com' where userid = 'user0001';
+update skinny set email = 'jdoe@gmail.com' 
+where userid = 'user0001';
                     </code></pre>
                     </section>
                     <section data-transition="none">
@@ -240,19 +239,6 @@ $> select * from wide where objectid = 'object001'
  
 (1 rows)
 					</code></pre>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Extras
-
-* Secondary Index
-* UDT
-* UDF/UDA
-* Delete / tombstones
-* TTL
-* ...
-
-                        </textarea>
                     </section>
                 </section>
                 <section>
