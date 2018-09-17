@@ -24,9 +24,9 @@
 
 In a nutshell
 
-Data Model &amp; Query Language
-
 How it works
+
+Data Model &amp; Query Language
 
 Read &amp; Write path
 
@@ -99,151 +99,6 @@ Conclusion
                 <section>
                     <section data-markdown>
                         <textarea data-template>
-## Data Model & Query Language
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-## Data Model
-
-* Column Oriented
-* Keyspace
-* Column Family
-* Partition
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Partition
-
-![Partition](img/Partition_exemple.png)
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Partition
-
-![Partition](img/Partition_exemple2.png)
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### CQL
-
-* Cassandra Query Language (SQL Like)
-* Schema
-* Keyspace
-* Table 
-* Row
-* Primary Key
-* Partition Key
-                        </textarea>
-                    </section>
-                    <section data-transition="none">
-					<h3>CQL / Skinny partition</h3>
-					<pre><code class="hljs" data-trim contenteditable>
-create table skinny (
-    userid varchar primary key, 
-    firstname varchar, 
-    lastname varchar, 
-    email varchar);
-					</code></pre>
-                    <p> 
-                        <ul>
-                            <li>Primary Key == Partition Key</li>
-                            <li>No mandatory columns</li>
-                        </ul>
-                    </p>
-                    </section>
-                    <section data-transition="none">
-					<h3>CQL / Skinny partition</h3>
-					<pre><code class="hljs" data-trim contenteditable>
-insert into skinny (userid, firstname, lastname, email) 
-values ('user0001', 'John', 'Doe', "jdoe@yahoo.fr");
-                    </code></pre>
-					<pre><code class="hljs" data-trim contenteditable>
-update skinny set email = 'jdoe@gmail.com' 
-where userid = 'user0001';
-                    </code></pre>
-                    </section>
-                    <section data-transition="none">
-					<h3>CQL / Skinny partition</h3>
-					<pre><code class="hljs" data-trim contenteditable>
-$>select * from skinny; 
-
- userid   | email          | firstname     | lastname
-----------+----------------+---------------+-------------
- user0001 | jdoe@gmail.com | John          | Doe
- user0002 |           null | f_user0002    | l_user0002
-
-(2 rows)
-					</code></pre>
-                    <p>Where clause on primary key</p>
-					<pre><code class="hljs" data-trim contenteditable>
-$>select * from skinny where userid = 'user0001'; 
-
-userid   | email          | firstname     | lastname
----------+----------------+---------------+-------------
-user0001 | jdoe@gmail.com | John          | Doe
-
-(1 rows)
-					</code></pre>
-                    </section>  
-                    <section data-transition="none">
-					<h3>CQL / Wide partition</h3>
-					<pre><code class="hljs" data-trim contenteditable>
-create table wide (objectid varchar, hour long, 
-    temp float, pressure float,
-    primary key (objectid, hour));
-					</code></pre>
-                    <li>Primary Key == (Partition Key + Clustering Key) </li>
-                    </section>
-                    <section data-transition="none">
-					<h3>CQL / Wide partition</h3>
-					<pre><code class="hljs" data-trim contenteditable>
-$> select * from wide;
-
- objectid  | hour            | temp    | pressure
------------+-----------------+---------+----------
- object002 |    201811091600 |    24.2 | 1024.0
- object001 |    201811091600 |    22.6 | 1022.5
- object001 |    201811091700 |    22.2 | 1022.7
- 
-(3 rows)
-                    </code></pre>
-                    <br />
-                    <img src="img/Partition_exemple2.png"/>
-                    </section>
-                    <section data-transition="none">
-					<h3>CQL / Wide partition</h3>
-					<pre><code class="hljs" data-trim contenteditable>
-$> select * from wide where objectid = 'object001';
-
- objectid  | hour            | temp    | pressure
------------+-----------------+---------+----------
- object001 |    201811091600 |    22.6 | 1022.5
- object001 |    201811091700 |    22.2 | 1022.7
- 
-(2 rows)
-					</code></pre>
-                </section>
-                <section data-transition="none">
-                        <h3>CQL / Wide partition</h3>
-                        <pre><code class="hljs" data-trim contenteditable>
-$> select * from wide where objectid = 'object001' 
-    and hour > 201811091600;
-
- objectid  | hour            | temp    | pressure
- -----------+-----------------+---------+----------
- object001 |    201811091700 |    22.2 | 1022.7
- 
-(1 rows)
-					</code></pre>
-                    </section>
-                </section>
-                <section>
-                    <section data-markdown>
-                        <textarea data-template>
 ## How it works
                         </textarea>
                     </section>
@@ -253,7 +108,6 @@ $> select * from wide where objectid = 'object001'
 
 - Masterless
 - TokenRange shared by nodes : [-2^63, 2^63]
-- Gossip
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -322,6 +176,202 @@ $> select * from wide where objectid = 'object001'
                     </section>
                 </section>
                 <section>
+                    <section data-markdown>
+                        <textarea data-template>
+## Data Model & Query Language
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+## Data Model
+
+* Column Oriented
+* Keyspace
+* Column Family
+* Partition
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Partition
+
+![Partition](img/Partition_exemple.png)
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Partition
+
+![Partition](img/Partition_exemple2.png)
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### CQL
+
+* Cassandra Query Language (SQL Like)
+* Schema
+* Keyspace
+* Table 
+* Primary Key
+                        </textarea>
+                    </section>
+                    <section data-transition="none">
+                        <h3>CQL / Skinny partition</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+create keyspace example
+with replication = { 
+    'class' : 'SimpleStrategy', 
+    'replication_factor' : 3 
+};
+                        </code></pre>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Skinny partition</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+create table skinny (
+    userid varchar primary key, 
+    firstname varchar, 
+    lastname varchar, 
+    email varchar);
+					</code></pre>
+                    <p> 
+                        <ul>
+                            <li>Primary Key == Partition Key</li>
+                            <li>No mandatory columns</li>
+                        </ul>
+                    </p>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Skinny partition</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+insert into skinny (userid, firstname, lastname, email) 
+values ('user0001', 'John', 'Doe', "jdoe@yahoo.fr");
+                    </code></pre>
+					<pre><code class="hljs" data-trim contenteditable>
+update skinny set email = 'jdoe@gmail.com' 
+where userid = 'user0001';
+                    </code></pre>
+					<pre><code class="hljs" data-trim contenteditable>
+update skinny set firstname = 'f_user0002',
+set lastname = 'l_user0002',
+where userid = 'user0002';
+                    </code></pre>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Skinny partition</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+$>select * from skinny; 
+
+ userid   | email          | firstname     | lastname
+----------+----------------+---------------+-------------
+ user0001 | jdoe@gmail.com | John          | Doe
+ user0002 |           null | f_user0002    | l_user0002
+
+(2 rows)
+					</code></pre>
+                    <p>Where clause on primary key</p>
+					<pre><code class="hljs" data-trim contenteditable>
+$>select * from skinny where userid = 'user0001'; 
+
+userid   | email          | firstname     | lastname
+---------+----------------+---------------+-------------
+user0001 | jdoe@gmail.com | John          | Doe
+
+(1 rows)
+					</code></pre>
+                    </section>  
+                    <section data-transition="none">
+					<h3>CQL / Wide partition</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+create table wide (objectid varchar, hour long, 
+    temp float, pressure float,
+    primary key (objectid, hour));
+					</code></pre>
+                    <li>Primary Key == (Partition Key + Clustering Key) </li>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Wide partition</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+$> select * from wide;
+
+ objectid  | hour            | temp    | pressure
+-----------+-----------------+---------+----------
+ object002 |    201809121600 |    24.2 | 1024.0
+ object001 |    201809121600 |    22.6 | 1022.5
+ object001 |    201809121700 |    22.2 | 1022.7
+ 
+(3 rows)
+                    </code></pre>
+                    <br />
+                    <img src="img/Partition_exemple2.png"/>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Wide partition</h3>
+					<pre><code class="hljs" data-trim contenteditable>
+$> select * from wide where objectid = 'object001';
+
+ objectid  | hour            | temp    | pressure
+-----------+-----------------+---------+----------
+ object001 |    201809121600 |    22.6 | 1022.5
+ object001 |    201809121700 |    22.2 | 1022.7
+ 
+(2 rows)
+					</code></pre>
+                </section>
+                <section data-transition="none">
+                        <h3>CQL / Wide partition</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide where objectid = 'object001' 
+    and hour > 201809121600;
+
+ objectid  | hour            | temp    | pressure
+ ----------+-----------------+---------+----------
+ object001 |    201809121700 |    22.2 | 1022.7
+ 
+(1 rows)
+					</code></pre>
+                    </section>
+                    <section data-transition="none">
+                        <h3>CQL / Static column</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+create table wide (objectid varchar, hour long, 
+    temp float, pressure float,
+    serialNum varchar static, 
+    primary key (objectid, hour));
+                        </code></pre>
+                        <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide;
+
+objectid  | serialNum | hour            | temp    | pressure
+----------+-----------+-----------------+---------+----------
+object002 | serialo02 |    201809121600 |    24.2 | 1024.0
+object001 | serial1   |    201809121600 |    22.6 | 1022.5
+object001 | serial1   |    201809121700 |    22.2 | 1022.7
+
+(3 rows)
+                        </code></pre>
+                    </section>
+                    <section data-transition="none">
+                        <h3>CQL / Static column</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+update wide set serialNum = 'serialo01'
+where objectid = 'object001';
+                        </code></pre>
+                        <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide;
+
+objectid  | serialNum | hour            | temp    | pressure
+----------+-----------+-----------------+---------+----------
+object002 | serialo02 |    201809121600 |    24.2 | 1024.0
+object001 | serialo01 |    201809121600 |    22.6 | 1022.5
+object001 | serialo01 |    201809121700 |    22.2 | 1022.7
+
+(3 rows)
+                        </code></pre>
+                    </section>
+                </section>
+                 <section>
                     <section data-markdown>
                         <textarea data-template>
 ## Write Path
