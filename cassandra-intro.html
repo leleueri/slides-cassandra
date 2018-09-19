@@ -371,6 +371,34 @@ object001 | serialo01 |    201809121700 |    22.2 | 1022.7
 (3 rows)
                         </code></pre>
                     </section>
+                    <section data-transition="none">
+                        <h3>CQL / Secondary Index</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+CREATE INDEX temp_idx ON wide (temp);
+                        </code></pre>
+                        <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide where objectid = 'object001'
+   and temp = '22.2';
+
+objectid  | serialNum | hour            | temp    | pressure
+----------+-----------+-----------------+---------+----------
+object001 | serial1   |    201809121700 |    22.2 | 1022.7
+
+(1 rows)
+                        </code></pre>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### CQL / Data types
+* Varchar
+* Int
+* Blob
+* UUID / TimeUUID
+* ...
+* Collections (List, Set, Map)
+* User Defined Type
+                      </textarea>
+                    </section>
                 </section>
                  <section>
                     <section data-markdown>
