@@ -45,6 +45,7 @@ Conclusion
 
 - NoSQL database column oriented 
 - Apache project since 2008
+- Initially developed by Facebook
 - Inspired by Amazon Dynamo & Google BigTable
                         </textarea>
                     </section>
@@ -105,6 +106,7 @@ Conclusion
                         <textarea data-template>
 ### How it works
 
+- Distributed Hash table
 - Masterless
 - TokenRange shared by nodes : [-2^63, 2^63]
                         </textarea>
@@ -216,7 +218,7 @@ Conclusion
                         </textarea>
                     </section>
                     <section data-transition="none">
-                        <h3>CQL / Skinny partition</h3>
+                        <h3>CQL / Keyspace</h3>
                         <pre><code class="hljs" data-trim contenteditable>
 create keyspace example
 with replication = { 
