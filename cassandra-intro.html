@@ -26,11 +26,11 @@ In a nutshell
 
 How it works
 
-Data Model
+Data Model &amp; Query Language
 
 Read &amp; Write path
 
-Caveats
+Conclusion
                     </textarea>
                 </section>
                 <section>
@@ -43,21 +43,20 @@ Caveats
                         <textarea data-template>
 ### In a nutshell
 
-- NoSQL database column oriented
+- NoSQL database column oriented 
 - Apache project since 2008
-- Brewer's CAP Theorem : focus on AP
+- Initially developed by Facebook
+- Inspired by Amazon Dynamo & Google BigTable
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
 ### Promises
 
-- High Availability
-- No SPOF
-- Scalable
+- High Availability / No SPOF
+- Scale-out
 - Multi-DC
-- Simple
-- Commodity hardware
+- Simple (really?)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -67,6 +66,24 @@ Caveats
 - Mainly for write heavy workload
 - Not ACID : Atomic Consistent Isolated Durable
 - BASE : Basic Availability Soft-state Eventual consistency
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### Why should I use Cassandra
+
+- Big Data
+- High Availability
+- Replication
+                        </textarea>
+                    </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### When Cassandra is NOT a good solution
+
+- Small data 
+- Need ACID transactions
+- Need Relational model (Join)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -87,11 +104,11 @@ Caveats
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-## How it works
+### How it works
 
-- Node : Cassandra process
-- Cluster : Set of cassandra nodes
-- TokenRange shared by nodes : [-2^63 +2^63]
+- Distributed Hash table
+- Masterless
+- TokenRange shared by nodes : [-2^63, 2^63]
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -156,13 +173,14 @@ Caveats
 
 * Read_Repair
 * Repair
+* CLw + CLr > RF 
                         </textarea>
                     </section>
                 </section>
                 <section>
                     <section data-markdown>
                         <textarea data-template>
-## Data Model
+## Data Model & Query Language
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -170,38 +188,23 @@ Caveats
 ## Data Model
 
 * Column Oriented
-* Legacy model
-* CQL
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Legacy Data Model
-
 * Keyspace
-* Column Family 
-* Row
-* Row key
-* Column Key
-* Column Value
-    * Metadata
-    * Timestamp
-    * Value 
-* Thrift protocol
+* Column Family
+* Partition
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-### Skinny Row
+### Partition
 
-![Skinny Row](img/skinny_row.png)
+![Partition](img/Partition_exemple.png)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
                         <textarea data-template>
-### Wide Row
+### Partition
 
-![Wide Row](img/wide_row.png)
+![Partition](img/Partition_exemple2.png)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -209,42 +212,75 @@ Caveats
 ### CQL
 
 * Cassandra Query Language (SQL Like)
-* Keyspace
 * Schema
+* Keyspace
 * Table 
 * Primary Key
-* Partition Key
-* Partition (row)
-* Row
                         </textarea>
                     </section>
+                    <section data-markdown data-transition="none">
+                        <textarea data-template>
+### CQL / Data types
+* Varchar
+* Int
+* Blob
+* UUID / TimeUUID
+* ...
+* Collections (List, Set, Map)
+* User Defined Type
+                      </textarea>
+                    </section>
                     <section data-transition="none">
-					<h3>CQL / Skinny row</h3>
+                        <h3>CQL / Keyspace</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+create keyspace example
+with replication = { 
+    'class' : 'SimpleStrategy', 
+    'replication_factor' : 3 
+};
+                        </code></pre>
+                    </section>
+                    <section data-transition="none">
+					<h3>CQL / Skinny partition</h3>
 					<pre><code class="hljs" data-trim contenteditable>
 create table skinny (
     userid varchar primary key, 
     firstname varchar, 
     lastname varchar, 
-    birth_year int);
+    email varchar);
 					</code></pre>
-                    <p> Primary Key == Partition Key (== Row Key) </p>
+                    <p> 
+                        <ul>
+                            <li>Primary Key == Partition Key</li>
+                            <li>No mandatory columns</li>
+                        </ul>
+                    </p>
                     </section>
                     <section data-transition="none">
-					<h3>CQL / Skinny row</h3>
+					<h3>CQL / Skinny partition</h3>
 					<pre><code class="hljs" data-trim contenteditable>
-insert into skinny (userid, firstname, lastname, birth_year) 
-values ('user0001', 'f_user0001', 'l_user0001', 1983);
-					</code></pre>
+insert into skinny (userid, firstname, lastname, email) 
+values ('user0001', 'John', 'Doe', "jdoe@yahoo.fr");
+                    </code></pre>
+					<pre><code class="hljs" data-trim contenteditable>
+update skinny set email = 'jdoe@gmail.com' 
+where userid = 'user0001';
+                    </code></pre>
+					<pre><code class="hljs" data-trim contenteditable>
+update skinny set firstname = 'f_user0002',
+set lastname = 'l_user0002',
+where userid = 'user0002';
+                    </code></pre>
                     </section>
                     <section data-transition="none">
-					<h3>CQL / Skinny row</h3>
+					<h3>CQL / Skinny partition</h3>
 					<pre><code class="hljs" data-trim contenteditable>
 $>select * from skinny; 
 
- userid   | birth_year | firstname     | lastname
-----------+------------+---------------+-------------
- user0001 |       1983 | f_user0001    | l_user0001
- user0002 |       null | f_user0002    | l_user0002
+ userid   | email          | firstname     | lastname
+----------+----------------+---------------+-------------
+ user0001 | jdoe@gmail.com | John          | Doe
+ user0002 |           null | f_user0002    | l_user0002
 
 (2 rows)
 					</code></pre>
@@ -252,77 +288,120 @@ $>select * from skinny;
 					<pre><code class="hljs" data-trim contenteditable>
 $>select * from skinny where userid = 'user0001'; 
 
- userid   | birth_year | firstname     | lastname
-----------+------------+---------------+-------------
- user0001 |       1983 | f_user0001    | l_user0001
+userid   | email          | firstname     | lastname
+---------+----------------+---------------+-------------
+user0001 | jdoe@gmail.com | John          | Doe
 
-(2 rows)
+(1 rows)
 					</code></pre>
                     </section>  
                     <section data-transition="none">
-					<h3>CQL / Wide row</h3>
+					<h3>CQL / Wide partition</h3>
 					<pre><code class="hljs" data-trim contenteditable>
-create table wide (objectid varchar, resolution varchar, 
-    format varchar, size int, 
-    primary key (objectid, resolution));
+create table wide (objectid varchar, hour long, 
+    temp float, pressure float,
+    primary key (objectid, hour));
 					</code></pre>
                     <li>Primary Key == (Partition Key + Clustering Key) </li>
-                    <li>Partition Key == Row Key </li>
                     </section>
                     <section data-transition="none">
-					<h3>CQL / Wide row</h3>
+					<h3>CQL / Wide partition</h3>
 					<pre><code class="hljs" data-trim contenteditable>
 $> select * from wide;
 
- objectid  | resolution | format | size
------------+------------+--------+--------
- object002 |    800x600 |    PNG | 10240
- object001 |    128x128 |   JPEG |  1024
- object001 |    800x600 |   JPEG | 10240
+ objectid  | hour            | temp    | pressure
+-----------+-----------------+---------+----------
+ object002 |    201809121600 |    24.2 | 1024.0
+ object001 |    201809121600 |    22.6 | 1022.5
+ object001 |    201809121700 |    22.2 | 1022.7
  
 (3 rows)
-					</code></pre>
+                    </code></pre>
+                    <br />
+                    <img src="img/Partition_exemple2.png"/>
                     </section>
                     <section data-transition="none">
-					<h3>CQL / Wide row</h3>
+					<h3>CQL / Wide partition</h3>
 					<pre><code class="hljs" data-trim contenteditable>
 $> select * from wide where objectid = 'object001';
 
- objectid  | resolution | format | size
------------+------------+--------+--------
- object001 |    128x128 |   JPEG |  1024
- object001 |    800x600 |   JPEG | 10240
+ objectid  | hour            | temp    | pressure
+-----------+-----------------+---------+----------
+ object001 |    201809121600 |    22.6 | 1022.5
+ object001 |    201809121700 |    22.2 | 1022.7
  
 (2 rows)
 					</code></pre>
-                    
-                    <pre><code class="hljs" data-trim contenteditable>
+                </section>
+                <section data-transition="none">
+                        <h3>CQL / Wide partition</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
 $> select * from wide where objectid = 'object001' 
-    and resolution > '128x128';
+    and hour > 201809121600;
 
- objectid  | resolution | format | size
------------+------------+--------+--------
- object001 |    800x600 |   JPEG | 10240
+ objectid  | hour            | temp    | pressure
+ ----------+-----------------+---------+----------
+ object001 |    201809121700 |    22.2 | 1022.7
  
 (1 rows)
 					</code></pre>
                     </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Extras
+                    <section data-transition="none">
+                        <h3>CQL / Static column</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+create table wide (objectid varchar, hour long, 
+    temp float, pressure float,
+    serialNum varchar static, 
+    primary key (objectid, hour));
+                        </code></pre>
+                        <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide;
 
-* No mandatory columns
-* Secondary Index
-* UDT
-* UDF/UDA
-* Delete / tombstones
-* TTL
-* ...
+objectid  | serialNum | hour            | temp    | pressure
+----------+-----------+-----------------+---------+----------
+object002 | serialo02 |    201809121600 |    24.2 | 1024.0
+object001 | serial1   |    201809121600 |    22.6 | 1022.5
+object001 | serial1   |    201809121700 |    22.2 | 1022.7
 
-                        </textarea>
+(3 rows)
+                        </code></pre>
+                    </section>
+                    <section data-transition="none">
+                        <h3>CQL / Static column</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+update wide set serialNum = 'serialo01'
+where objectid = 'object001';
+                        </code></pre>
+                        <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide;
+
+objectid  | serialNum | hour            | temp    | pressure
+----------+-----------+-----------------+---------+----------
+object002 | serialo02 |    201809121600 |    24.2 | 1024.0
+object001 | serialo01 |    201809121600 |    22.6 | 1022.5
+object001 | serialo01 |    201809121700 |    22.2 | 1022.7
+
+(3 rows)
+                        </code></pre>
+                    </section>
+                    <section data-transition="none">
+                        <h3>CQL / Secondary Index</h3>
+                        <pre><code class="hljs" data-trim contenteditable>
+CREATE INDEX temp_idx ON wide (temp);
+                        </code></pre>
+                        <pre><code class="hljs" data-trim contenteditable>
+$> select * from wide where objectid = 'object001'
+   and temp = '22.2';
+
+objectid  | serialNum | hour            | temp    | pressure
+----------+-----------+-----------------+---------+----------
+object001 | serial1   |    201809121700 |    22.2 | 1022.7
+
+(1 rows)
+                        </code></pre>
                     </section>
                 </section>
-                <section>
+                 <section>
                     <section data-markdown>
                         <textarea data-template>
 ## Write Path
@@ -435,7 +514,7 @@ $> select * from wide where objectid = 'object001'
                 <section>
                     <section data-markdown>
                         <textarea data-template>
-## Caveats
+## Conclusion
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -443,18 +522,11 @@ $> select * from wide where objectid = 'object001'
 ### NoSQL
 
 * Cassandra is a NoSQL database
+* High Availability
+* Replication
 * Write Heavy
 * Query First
 * Denormalize !
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Anti-Pattern
-
-* Avoid read before write (upsert)
-* Avoid Large Wide rows
-* DO NOT Use Cassandra as distributed queue (tombstones)
                         </textarea>
                     </section>
                     <section data-markdown data-transition="none">
@@ -464,26 +536,6 @@ $> select * from wide where objectid = 'object001'
 * Benchmarks are mandatory
 * Long runs for compaction
 * Launch repairs
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Safety
-
-* AuthN/AuthZ
-* SSL/TLS
-* Backup
-                        </textarea>
-                    </section>
-                    <section data-markdown data-transition="none">
-                        <textarea data-template>
-### Monitoring / Run
-
-* Metrics
-* Nodetool
-* Repair !!
-* JBOD / RAID0
-* ...
                         </textarea>
                     </section>
                 </section>
@@ -511,5 +563,13 @@ $> select * from wide where objectid = 'object001'
 				]
 			});
 		</script>
+    
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
 	</body>
 </html>
