@@ -355,17 +355,64 @@ sar -s 08:00:00 -e 09:00:00 -f /var/log/sa01
 
 ![https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html](perf_img/heap.png) 
 
+* Minor GC : GC on the Young Space
+* Major GC : GC on the Old Space
+* Full GC : Both Spaces :)
+
                 </textarea>
             </section>
             <section data-markdown>
                 <textarea data-template>
-### How to diagnose Memory Issues
+### GC logs
 
-* jstat
-* jmap
-* GC logs
-* MemoryAnalyzer
-* AsynProfiler (alloc)
+* JVM Options
+  * -Xloggc:logs/gc-$(date '+%Y-%m-%d_%H%M').log 
+  * -XX:+PrintGCDetails
+  * -XX:+PrintTenuringDistribution
+  * -XX:+PrintGCDateStamps
+* Tools
+  * GCViewer (opensource)
+  * gceasy.io (online)
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### jstat
+
+* JVM statistics
+  * HotSpot Just-In-Time Compiler Statistics
+  * Garbage-collected heap statistics
+  
+```
+# Summary of garbage collection statistics
+jstat -gc $PID 500 10
+
+S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU    YGC     YGCT    FGC    FGCT     GCT
+7680.0 4608.0  0.0   4211.7 313856.0 261588.8  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 261599.3  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 261818.9  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 261852.5  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 261876.7  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 261893.4  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 261976.0  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 261988.6  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 262005.1  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+7680.0 4608.0  0.0   4211.7 313856.0 262038.5  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
+```
+
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### jmap
+
+
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### MemoryAnalyzer
+
 
                 </textarea>
             </section>
@@ -391,6 +438,7 @@ sar -s 08:00:00 -e 09:00:00 -f /var/log/sa01
 
 * ThreadDump
 * Profiler (JProfiler, async profiler...)
+** async profiler (alloc)
                 </textarea>
             </section>
         </section>
