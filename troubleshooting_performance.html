@@ -22,7 +22,7 @@
 
 Introduction
 
-Basics
+Observability
 
 Linux commands
 
@@ -35,11 +35,6 @@ Conclusion
                     <section data-markdown>
                         <textarea data-template>
 ## Introduction
-                        </textarea>
-                    </section>
-                    <section data-markdown>
-                        <textarea data-template>
-### Introduction
 
 ![Huston](perf_img/huston.jpg)
                         </textarea>
@@ -57,28 +52,28 @@ Conclusion
                 <section>
                     <section data-markdown>
                         <textarea data-template>
-## Basics
-                        </textarea>
-                    </section>
-                    <section data-markdown>
-                        <textarea data-template>
-### Basics
-
-- Observability
-- Application Logs
-- Access Logs
+## Observability
                         </textarea>
                     </section>
                     <section data-markdown>
                         <textarea data-template>
 ### Observability
+
+- Monitoring
+- Tracing
+- Logs
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+### Monitoring
 
 ![Horus](perf_img/horus.png)
                         </textarea>
                     </section>
                     <section data-markdown>
                         <textarea data-template>
-### Observability
+### Tracing
 
 ![OpenTracing](perf_img/open-tracing.png)
                         </textarea>
@@ -104,7 +99,8 @@ Conclusion
 
 - Infra (servers, network, storage...)
 - App deployment (collector, logstash, web apps...)
-- Dependencies & code into your app (log format, metrics, right HTTP status...)
+- Dependencies (Metrics, Kamon...)
+- Best practices (log format, metrics, right HTTP status...)
                         </textarea>
                     </section>
                 </section>
@@ -124,19 +120,20 @@ Conclusion
     * cut
     * sort
     * sed
-* Count
+* Analyze
     * uniq
     * wc
+    * comm
                         </textarea>
                     </section>
                     <section>
-                        <h3>Example</h3>
+                        <h3>How much ERROR are present ?</h3>
                         <pre><code class="hljs" data-trim contenteditable>
 grep -c "ERROR" my-app.log
                         </code></pre>
                     </section>
                     <section>
-                        <h3>Example</h3>
+                        <h3>Extract all userId with error</h3>
                         <pre><code class="hljs" data-trim contenteditable>
 2019-04-05 07:39:21,738 [default] \
     ERROR n.a.s.c.d.m.m.s.a.MyClass \
@@ -148,7 +145,7 @@ grep "Something wrong happend for user" my-app.log \
                         </code></pre>
                     </section>
                     <section>
-                        <h3>Example</h3>
+                        <h3>Extract the number of errors per minutes</h3>
                         <pre><code class="hljs" data-trim >
 2019-04-05 07:39:21,738 [default] \
     ERROR n.a.s.c.d.m.m.s.a.MyClass \
@@ -207,13 +204,6 @@ grep "Something wrong happend for user" my-app.log \
                     </section>
                     <section data-markdown>
                             <textarea data-template>
-### top
-
-![top](perf_img/top.png) 
-                        </textarea>
-                    </section>
-                    <section data-markdown>
-                            <textarea data-template>
 ### vmstat
 
 vmstat 1 5
@@ -229,23 +219,191 @@ mpstat 5 2
 
 ![mpstat](perf_img/mpstat.png) 
                         </textarea>
+                    </section>                                        
+                    <section data-markdown>
+                        <textarea data-template>
+### free
+
+free -m
+
+![mpstat](perf_img/free_m.png) 
+
+* buffer = file system metadata
+* cache = pages with actual contents of files or block devices
+* -/+ buffer/cache 
+    * use = first line 'used' minus buffer & cache
+    * free = first line 'free' plus buffer & cache 
+    * the free value is the real amount of memory available 
+
+                    </textarea>
+                </section>
+                <section data-markdown>
+                    <textarea data-template>
+### pidstat
+
+* pidstat - Report statistics for Linux tasks.
+* May report CPU usage (default)
+* May report I/O statistics
+* May report page faults and memory utilization
+* May report  task switching activity
+
+![mpstat](perf_img/pidstat.png) 
+
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### lsof
+
+* List open files
+* May filter on PID
+* May filter on FD Type 
+* see man command for all options :)
+
+```
+# filter in PID
+lsof -p 1234
+# filter on socket IPv4 & Ipv6
+lsof -i 4 -i 6 -a
+# filter on IPv4
+lsof -i@127.0.0.1
+# filter on directory
+lsof +d /path/
+```
+                    </textarea>
+                </section>
+                <section data-markdown>
+                    <textarea data-template>
+### netstat
+
+* Network information 
+
+```
+# Listing all ports (both TCP and UDP) 
+netstat -a
+# Listing all active listening TCP ports
+netstat -lt
+# Listing all active listening TCP ports (with PID)
+netstat -ltp
+# Show statistics per protocol 
+netstat -s
+# Showing network interface packet transactions
+netstat -i
+```
+                        </textarea>
                     </section>
-                </section>
                 <section data-markdown>
                     <textarea data-template>
+### sar
+
+* Provide system activity information with history
+    * CPU
+    * IO
+    * Memory
+    * Context Switching 
+    * ...
+
+```
+# CPU from 08:00 AM to 09:00 AM
+sar -s 08:00:00 -e 09:00:00
+
+# Task Creation & CtxSwitch from 08:00 AM to 09:00 AM
+sar -w -s 08:00:00 -e 09:00:00
+
+# CPU first day of the month from 08:00 AM to 09:00 AM  
+sar -s 08:00:00 -e 09:00:00 -f /var/log/sa01
+
+```
+                    </textarea>
+                </section>
+        </section>
+        <section>
+            <section data-markdown>
+                <textarea data-template>
 ## What's about Java ? 
-                    </textarea>
-                </section>
-                <section data-markdown>
-                    <textarea data-template>
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### Main Issues (no specific to JVM)
+
+* Resources Leak (Memory Leak, Connection Leak)
+* Performance (High CPU usage, Latency)
+
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### Memory Management
+
+* On Heap / Off Heap
+* GC 
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### GCs
+
+* Serial : Optimized for memory footprint
+* Parallel : Optimized for throughput
+* CMS : Optimized for latency
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### GCs
+
+![https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html](perf_img/heap.png) 
+
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### How to diagnose Memory Issues
+
+* jstat
+* jmap
+* GC logs
+* MemoryAnalyzer
+* AsynProfiler (alloc)
+
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### GCs Next Generation
+        
+* G1 : 
+    * Throughput / Latency balance
+    * Introduced from JDK 6
+    * Default from JDK 9
+* ZGC : 
+    * Scalable low latency garbage collector 
+    * Pause times do not exceed 10ms
+    * Handle heaps ranging from a few hundred megabytes to multi terabytes in size
+    * Is it possible ???
+    * from JDK 11
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### Processing
+
+* ThreadDump
+* Profiler (JProfiler, async profiler...)
+                </textarea>
+            </section>
+        </section>
+    <section data-markdown>
+        <textarea data-template>
 ## Conclusion 
-                    </textarea>
-                </section>
-                <section data-markdown>
-                    <textarea data-template>
+        </textarea>
+    </section>
+    <section data-markdown>
+        <textarea data-template>
 ## Q & A
-                    </textarea>
-                </section>
+        </textarea>
+    </section>
 			</div>
 		</div>
 		<script src="lib/js/head.min.js"></script>
