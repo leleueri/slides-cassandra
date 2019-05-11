@@ -208,7 +208,7 @@ grep "Something wrong happend for user" my-app.log \
 
 vmstat 1 5
 
-![vmstat](perf_img/vmstat.png) 
+![vmstat](./perf_img/vmstat.PNG) 
                         </textarea>
                     </section>
                     <section data-markdown>
@@ -217,7 +217,7 @@ vmstat 1 5
 
 mpstat 5 2
 
-![mpstat](perf_img/mpstat.png) 
+![mpstat](./perf_img/mpstat.PNG) 
                         </textarea>
                     </section>                                        
                     <section data-markdown>
@@ -226,7 +226,7 @@ mpstat 5 2
 
 free -m
 
-![mpstat](perf_img/free_m.png) 
+![mpstat](./perf_img/free_m.PNG) 
 
 * buffer = file system metadata
 * cache = pages with actual contents of files or block devices
@@ -247,7 +247,7 @@ free -m
 * May report page faults and memory utilization
 * May report  task switching activity
 
-![mpstat](perf_img/pidstat.png) 
+![mpstat](./perf_img/pidstat.PNG) 
 
                 </textarea>
             </section>
@@ -353,7 +353,7 @@ sar -s 08:00:00 -e 09:00:00 -f /var/log/sa01
                 <textarea data-template>
 ### GCs
 
-![https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html](perf_img/heap.png) 
+![https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html](./perf_img/Heap.PNG) 
 
 * Minor GC : GC on the Young Space
 * Major GC : GC on the Old Space
@@ -375,15 +375,18 @@ sar -s 08:00:00 -e 09:00:00 -f /var/log/sa01
   * gceasy.io (online)
                 </textarea>
             </section>
-            <section data-markdown>
-                <textarea data-template>
-### jstat
-
-* JVM statistics
-  * HotSpot Just-In-Time Compiler Statistics
-  * Garbage-collected heap statistics
-  
-```
+            <section>
+                <h3>jstat</h3>
+                <ul>
+                    <li>JVM statistics</li>
+                    <li>
+                        <ul>
+                            <li>HotSpot Just-In-Time Compiler Statistics</li>
+                            <li>Garbage-collected heap statistics</li>
+                        </ul>
+                    </li>
+                </ul>
+                <pre><code data-trim data-noescape style="font-size: 51%">
 # Summary of garbage collection statistics
 jstat -gc $PID 500 10
 
@@ -398,20 +401,43 @@ S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU  
 7680.0 4608.0  0.0   4211.7 313856.0 261988.6  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
 7680.0 4608.0  0.0   4211.7 313856.0 262005.1  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
 7680.0 4608.0  0.0   4211.7 313856.0 262038.5  394752.0   387547.4  524288.0 162966.4    163    3.476   4      3.536    7.011
-```
-
-                </textarea>
+	        </code>
+            </pre>
             </section>
             <section data-markdown>
                 <textarea data-template>
 ### jmap
 
+* Class histogram
+* Heap Dump (not in production) 
+    * -XX:+HeapDumpOnOutOfMemoryError  
+    * -XX:HeapDumpPath=file-or-dir-path
+* Prefere JCMD instead of JMAP
 
+```
+# Heap information
+jmap -heap pid
+
+# Class histogram
+jmap -histo pid
+
+# Class histogram only for live objects
+jmap -histo:live pid
+
+# Heap Dump
+jmap dump:[live,]format=b,file=<filename>
+```
                 </textarea>
             </section>
             <section data-markdown>
                 <textarea data-template>
-### MemoryAnalyzer
+### MAT
+
+* Eclipse Memory Analyzer
+* Memory Leak
+* Heap Optimization
+
+// TODO image
 
 
                 </textarea>
@@ -436,7 +462,7 @@ S0C    S1C    S0U    S1U      EC       EU        OC         OU       PC     PU  
                 <textarea data-template>
 ### Processing
 
-* ThreadDump
+* ThreadDump / jstack 
 * Profiler (JProfiler, async profiler...)
 ** async profiler (alloc)
                 </textarea>
