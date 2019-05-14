@@ -379,12 +379,10 @@ sar -s 08:00:00 -e 09:00:00 -f /var/log/sa01
                 <h3>jstat</h3>
                 <ul>
                     <li>JVM statistics</li>
-                    <li>
                         <ul>
                             <li>HotSpot Just-In-Time Compiler Statistics</li>
                             <li>Garbage-collected heap statistics</li>
                         </ul>
-                    </li>
                 </ul>
                 <pre><code data-trim data-noescape style="font-size: 51%">
 # Summary of garbage collection statistics
@@ -431,14 +429,12 @@ jmap dump:[live,]format=b,file=<filename>
             </section>
             <section data-markdown>
                 <textarea data-template>
-### MAT
+### Eclipse Memory Analyzer
 
-* Eclipse Memory Analyzer
 * Memory Leak
 * Heap Optimization
 
-// TODO image
-
+![MAT](./perf_img/MAT.PNG) 
 
                 </textarea>
             </section>
@@ -450,11 +446,18 @@ jmap dump:[live,]format=b,file=<filename>
     * Throughput / Latency balance
     * Introduced from JDK 6
     * Default from JDK 9
+
+![https://www.oracle.com/webfolder/technetwork/tutorials/obe/java/G1GettingStarted/images/slide9.png](./perf_img/G1.PNG) 
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### GCs Next Generation
+
 * ZGC : 
     * Scalable low latency garbage collector 
     * Pause times do not exceed 10ms
     * Handle heaps ranging from a few hundred megabytes to multi terabytes in size
-    * Is it possible ???
     * from JDK 11
                 </textarea>
             </section>
@@ -462,16 +465,80 @@ jmap dump:[live,]format=b,file=<filename>
                 <textarea data-template>
 ### Processing
 
-* ThreadDump / jstack 
-* Profiler (JProfiler, async profiler...)
-** async profiler (alloc)
+* ThreadDump
+* jvmtop
+* Profiler
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### ThreadDump
+
+* Generate ThreadDump
+  * jstack
+  * kill -3
+* Analyze ThreadDump
+  * IBM ThreadAnalyzer
+  * JVisualVM
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### jvmtop
+
+Monitor JVM activity
+
+```
+# list all JVM Process
+./jvmtop.sh 
+
+# Activity of the specified jvm
+./jvmtop.sh $pid
+
+# CPU profiling at the specified jvm
+./jvmtop.sh -profile $pid
+```
+
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### Profiler
+
+* Oracle Tools
+  * JVisualVM
+  * Java Mission Control (OpenSouce from JDK 11)
+* JProfiler (commercial - evaluation key)
+* YourKit (commercial - 15 days evaluation version)
+* async-profiler (open source)
+                </textarea>
+            </section>
+            <section data-markdown>
+                <textarea data-template>
+### Async Profiler
+
+* CPU usage
+* Memory Allocation
+* Flame Graph
+
                 </textarea>
             </section>
         </section>
-    <section data-markdown>
-        <textarea data-template>
+    <section>
+        <section data-markdown>
+            <textarea data-template>
 ## Conclusion 
-        </textarea>
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+## Conclusion 
+
+* Observability is a key feature
+* Load tests are mandatory
+* Lot of tools exist
+            </textarea>
+        </section>
     </section>
     <section data-markdown>
         <textarea data-template>
