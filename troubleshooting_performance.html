@@ -45,7 +45,6 @@ Conclusion
 
 - What is the problem ?
 - How to diagnose ?
-- How to find a solution ?
                         </textarea>
                     </section>
                 </section>
@@ -88,7 +87,7 @@ Conclusion
                     </section>
                     <section data-markdown>
                         <textarea data-template>
-### ELK, AMP, OpenTracing ...
+### ELK, AM, OpenTracing ...
 
 ![Awsome](perf_img/awsome.jpg) 
                         </textarea>
@@ -127,7 +126,7 @@ Conclusion
                         </textarea>
                     </section>
                     <section>
-                        <h3>How much ERROR are present ?</h3>
+                        <h3>How much ERROR do you have ?</h3>
                         <pre><code class="hljs" data-trim contenteditable>
 grep -c "ERROR" my-app.log
                         </code></pre>
@@ -173,7 +172,7 @@ grep "Something wrong happend for user" my-app.log \
                     </section>
                     <section data-markdown>
                         <textarea data-template>
-### Deal with System Metrics (without AMP)
+### Deal with System Metrics (without AM)
 
 * CPU
     * top
@@ -188,7 +187,7 @@ grep "Something wrong happend for user" my-app.log \
                     </section>
                     <section data-markdown>
                             <textarea data-template>
-### Deal with System Metrics (without AMP)
+### Deal with System Metrics (without AM)
 
 * Process
     * ps
@@ -245,7 +244,7 @@ free -m
 * May report CPU usage (default)
 * May report I/O statistics
 * May report page faults and memory utilization
-* May report  task switching activity
+* May report task switching activity
 
 ![mpstat](./perf_img/pidstat.PNG) 
 
@@ -479,7 +478,7 @@ jmap dump:[live,]format=b,file=<filename>
   * kill -3
 * Analyze ThreadDump
   * IBM ThreadAnalyzer
-  * JVisualVM
+  * JVisualVM (Oracle)
                 </textarea>
             </section>
             <section data-markdown>
@@ -510,6 +509,7 @@ Monitor JVM activity
   * Java Mission Control (OpenSouce from JDK 11)
 * JProfiler (commercial - evaluation key)
 * YourKit (commercial - 15 days evaluation version)
+* APM (Dynatrace / Pinpoint)
 * async-profiler (open source)
                 </textarea>
             </section>
